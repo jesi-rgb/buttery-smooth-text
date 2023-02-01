@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic'
 import Header from '@/config'
 import Layout from '@/components/dom/Layout'
 import '@/styles/index.css'
-import Scroll from '@/templates/Scroll'
 
 const Scene = dynamic(() => import('@/components/canvas/Scene'), { ssr: true })
 
