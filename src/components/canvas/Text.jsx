@@ -1,20 +1,22 @@
 import { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Center, Edges, MeshTransmissionMaterial, Text3D, useCursor } from '@react-three/drei'
+import { Center, Text3D, useCursor } from '@react-three/drei'
 import { useControls } from 'leva'
 
-export default function Text({ text = 'butter', ...props }) {
+export default function Text({ ...props }) {
   const mesh = useRef(null)
   const [hovered, setHover] = useState(false)
+
   useCursor(hovered)
 
   const controls = useControls({
+    text: { value: 'butter' },
     textColor: { value: '#ff4eb8' },
     edges: { value: '#00ffff' },
     roughness: { value: 1, min: 0, max: 1, step: 0.05 },
     transmission: { value: 0.5, min: 0, max: 1, step: 0.1 },
     metalness: { value: 0.5, min: 0, max: 1, step: 0.1 },
-    thiccness: { value: 1, step: 1 },
+    thiccness: { value: 1, step: 0.1 },
     bevelEnabled: { value: false },
     bevelSize: { value: 0.1 },
   })
@@ -37,9 +39,10 @@ export default function Text({ text = 'butter', ...props }) {
     <group ref={mesh} {...props} onPointerOver={() => setHover(true)} onPointerOut={() => setHover(false)}>
       <Center>
         <Text3D font='/fonts/kyiv-serif.json' {...textOptions}>
-          {text}
+          {controls.text}
           {/* <meshNormalMaterial /> */}
-          <meshPhysicalMaterial roughness={controls.roughness} color={controls.textColor} />
+          {/* <meshPhysicalMaterial roughness={controls.roughness} color={controls.textColor} /> */}
+          <meshDistanceMaterial />
           {/* <MeshTransmissionMaterial
             resolution={8}
             samples={16}
@@ -48,11 +51,6 @@ export default function Text({ text = 'butter', ...props }) {
             transmission={controls.transmission}
             envMapIntensity={1}
           /> */}
-          <Edges
-            scale={1.0}
-            threshold={15} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
-            color={controls.edges}
-          />
         </Text3D>
       </Center>
     </group>

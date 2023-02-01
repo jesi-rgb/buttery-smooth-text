@@ -1,6 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { Sky, ContactShadows, Environment, OrbitControls, Preload, Stars, Grid } from '@react-three/drei'
-import { AmbientLight } from 'three'
+import { Environment, OrbitControls, Preload, Stars, Grid } from '@react-three/drei'
 
 export default function Scene({ children, ...props }) {
   // Everything defined in here will persist between route changes, only children are swapped

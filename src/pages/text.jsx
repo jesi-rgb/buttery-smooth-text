@@ -9,12 +9,12 @@ const Text = dynamic(() => import('@/components/canvas/Text'), { ssr: false })
 
 // Dom components go here
 export default function Page(props) {
-  return <h1 className='mt-20 font-serif text-4xl font-bold text-center text-white'>Some cool text!</h1>
+  return <h1 className='mt-20 font-serif text-4xl font-bold text-center text-white'>buttery smooooth text 😎</h1>
 }
 
 // Canvas components go here
 // It will receive same props as the Page component (from getStaticProps, etc.)
-Page.canvas = (props) => <Text scale={1} route='/blob' position-y={1} />
+Page.canvas = (props) => <Text position-y={0.5} />
 
 export async function getStaticProps() {
   return { props: { title: 'Buttery Smooth Text ' } }
