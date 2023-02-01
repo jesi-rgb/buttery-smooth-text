@@ -11,7 +11,7 @@ export default function Text({ text = 'butter', ...props }) {
     roughness: { value: 1, min: 0, max: 1, step: 0.05 },
     transmission: { value: 0.5, min: 0, max: 1, step: 0.1 },
     metalness: { value: 0.5, min: 0, max: 1, step: 0.1 },
-    thiccness: { value: 0.5 },
+    thiccness: { value: 1, step: 1 },
     bevelEnabled: { value: false },
     bevelSize: { value: 0.1 },
   })
@@ -25,7 +25,7 @@ export default function Text({ text = 'butter', ...props }) {
   }
   useFrame((state, delta) => {
     const t = state.clock.getElapsedTime()
-    mesh.current.rotation.y += 0.005
+    mesh.current.rotation.y += 0.002
     // mesh.current.rotation.x = Math.cos(t) * (Math.PI / 8)
     // mesh.current.rotation.z -= delta / 4
   })
@@ -35,21 +35,21 @@ export default function Text({ text = 'butter', ...props }) {
       <Center bottom>
         <Text3D font='/fonts/kyiv-serif.json' {...textOptions}>
           {text}
-          {/* <meshNormalMaterial /> */}
+          <meshNormalMaterial />
           {/* <meshPhysicalMaterial roughness={controls.roughness} color={controls.text} /> */}
-          <MeshTransmissionMaterial
-            resolution={128}
+          {/* <MeshTransmissionMaterial
+            resolution={8}
             samples={16}
             color={controls.text}
             metalness={controls.metalness}
             transmission={controls.transmission}
-            envMapIntensity={2}
-          />
-          {/* <Edges
-            scale={1.1}
-            threshold={15} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
-            color={colorOptions.edges}
+            envMapIntensity={1}
           /> */}
+          <Edges
+            scale={1.01}
+            threshold={15} // Display edges only when the angle between two faces exceeds this value (default=15 degrees)
+            color={controls.edges}
+          />
         </Text3D>
       </Center>
     </group>
