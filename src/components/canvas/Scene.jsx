@@ -5,8 +5,8 @@ export default function Scene({ children, ...props }) {
   // Everything defined in here will persist between route changes, only children are swapped
   return (
     <Canvas {...props}>
-      <directionalLight intensity={4.75} />
-      <ambientLight intensity={1.75} />
+      <directionalLight intensity={14.75} />
+      <ambientLight intensity={4.75} />
       {children}
       <Preload all />
       <Environment preset='night' />

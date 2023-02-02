@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic'
 import Instructions from '@/components/dom/Instructions'
+import Flower from '@/components/canvas/Flower'
 
 // Dynamic import is used to prevent a payload when the website starts, that includes threejs, r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
@@ -14,7 +15,8 @@ export default function Page(props) {
 
 // Canvas components go here
 // It will receive same props as the Page component (from getStaticProps, etc.)
-Page.canvas = (props) => <Text position-y={0.5} />
+// Page.canvas = (props) => <Text position-y={0.5} />
+Page.canvas = (props) => <Text />
 
 export async function getStaticProps() {
   return { props: { title: 'Buttery Smooth Text ' } }
