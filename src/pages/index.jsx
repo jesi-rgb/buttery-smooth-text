@@ -1,26 +1,23 @@
 import dynamic from 'next/dynamic'
 import Instructions from '@/components/dom/Instructions'
+import Flower from '@/components/canvas/Flower'
+import Text from '@/components/canvas/Text'
 
 // Dynamic import is used to prevent a payload when the website starts, that includes threejs, r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
 // If something goes wrong go back to a static import to show the error.
 // https://github.com/pmndrs/react-three-next/issues/49
-const Logo = dynamic(() => import('@/components/canvas/Logo'), { ssr: false })
+// const Text = dynamic(() => import('@/components/canvas/Text'), { ssr: false })
 
 // Dom components go here
 export default function Page(props) {
-  return (
-    <Instructions>
-      This is a minimal starter for Nextjs + React-three-fiber and Threejs. Click on the{' '}
-      <span className='text-cyan-200'>atom&apos;s nucleus</span> to navigate to the{' '}
-      <span className='text-green-200'>/blob</span> page. OrbitControls are enabled by default.
-    </Instructions>
-  )
+  return <h1 className='mt-20 font-serif text-4xl font-bold text-center text-white'>buttery smooooth text 😎</h1>
 }
 
 // Canvas components go here
 // It will receive same props as the Page component (from getStaticProps, etc.)
-Page.canvas = (props) => <Logo scale={0.5} route='/blob' position-y={-1} />
+// Page.canvas = (props) => <Text position-y={0.5} />
+Page.canvas = (props) => <Text />
 
 export async function getStaticProps() {
   return { props: { title: 'Buttery Smooth Text ' } }
