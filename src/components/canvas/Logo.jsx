@@ -3,7 +3,6 @@ import { useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useFrame } from '@react-three/fiber'
 import { Line, useCursor } from '@react-three/drei'
-import { ScrollTicker } from '@/templates/Scroll'
 
 export default function Logo({ route, ...props }) {
   const router = useRouter()
