@@ -11,7 +11,9 @@ import Text from '@/components/canvas/Text'
 
 // Dom components go here
 export default function Page(props) {
-  return <h1 className='mt-20 font-serif text-4xl font-bold text-center text-white'>buttery smooooth text 😎</h1>
+  return (
+    <h1 className='mt-20 font-serif text-2xl font-bold text-center text-white lg:text-4xl'>buttery smooooth text 😎</h1>
+  )
 }
 
 // Canvas components go here
