@@ -9,7 +9,7 @@ export default function Scene({ children, ...props }) {
       orthographic
       camera={{
         position: [-0.1, 0.2, 0.5],
-        near: -10000,
+        near: -50,
         far: 10000,
         zoom: 1.5 * 70,
       }}>
@@ -19,7 +19,7 @@ export default function Scene({ children, ...props }) {
       <Preload all />
       <Environment preset='city' />
       <OrbitControls makeDefault rotateSpeed={2} minPolarAngle={0} maxPolarAngle={Math.PI / 2.5} />
-      <Stars radius={40} depth={25} count={15000} factor={4} saturation={0.3} fade speed={1} />
+      <Stars radius={40} depth={2} count={15000} factor={4} saturation={0.3} fade speed={1} />
 
       <Grid
         position={[0, -1.1, 0]}
