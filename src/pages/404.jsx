@@ -1,3 +1,4 @@
+import Flower from '@/components/canvas/Flower'
 import dynamic from 'next/dynamic'
 
 const Logo = dynamic(() => import('@/components/canvas/Logo'), { ssr: false })
@@ -11,4 +12,4 @@ export default function Error() {
   )
 }
 
-Error.canvas = (props) => <Logo scale={0.5} route='/' position-y={-1} />
+Error.canvas = (props) => <Flower />

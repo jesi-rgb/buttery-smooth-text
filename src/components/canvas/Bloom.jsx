@@ -1,23 +1,13 @@
-import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useRef, useState } from 'react'
-import { EffectComposer, RenderPass, UnrealBloomPass } from 'three-stdlib'
-
+import { Effects } from '@react-three/drei'
 import { extend } from '@react-three/fiber'
+import { UnrealBloomPass } from 'three-stdlib'
 
-export default function Bloom({ children }) {
-  extend({ EffectComposer, RenderPass, UnrealBloomPass })
-  const { gl, camera, size } = useThree()
-  const [scene, setScene] = useState()
-  const composer = useRef()
-  useEffect(() => void scene && composer.current.setSize(size.width, size.height), [size])
-  useFrame(() => scene && composer.current.render(), 1)
+extend({ UnrealBloomPass })
+export default function Bloomy({ strength, radius }) {
   return (
-    <>
-      <scene ref={setScene}>{children}</scene>
-      <effectComposer ref={composer} args={[gl]}>
-        <renderPass attachArray='passes' scene={scene} camera={camera} />
-        <UnrealBloomPass attachArray='passes' args={[undefined, 1.5, 1, 0]} />
-      </effectComposer>
-    </>
+    <Effects disableGamma>
+      {/* threshhold has to be 1, so nothing at all gets bloom by default */}
+      <unrealBloomPass threshold={1 - strength > 0.2 ? 1 - strength : 0.2} strength={strength} radius={radius} />
+    </Effects>
   )
 }
