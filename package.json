@@ -22,7 +22,6 @@
   "dependencies": {
     "@react-three/drei": "^9.56.5",
     "@react-three/fiber": "^8.10.1",
-    "@studio-freight/lenis": "github:studio-freight/lenis",
     "glsl-random": "^0.0.5",
     "lamina": "^1.1.23",
     "leva": "^0.9.34",
