@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Center, MeshTransmissionMaterial, Text3D, useCursor } from '@react-three/drei'
+import { Center, Text3D } from '@react-three/drei'
 import { useControls } from 'leva'
-import { Flower } from './Flower'
-import { Base, DebugLayerMaterial, Depth, Displace, Fresnel, LayerMaterial } from 'lamina'
+import { Displace, Fresnel, LayerMaterial } from 'lamina'
 
 export default function Text({ ...props }) {
   const mesh = useRef(null)
