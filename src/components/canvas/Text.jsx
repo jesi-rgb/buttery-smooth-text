@@ -1,15 +1,19 @@
-import { useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { extend, useFrame } from '@react-three/fiber'
 import { Center, Float, Text3D } from '@react-three/drei'
 import { useControls } from 'leva'
 import { Depth, Fresnel, LayerMaterial } from 'lamina'
 import Background from './Background'
 import Bloomy from './Bloom'
+import LoadingScreen from '../dom/LoadingScreen'
 
 export default function Text({ ...props }) {
   const mesh = useRef(null)
 
   const depth = useRef(null)
+
+  const [loading, setLoading] = useState(false)
+  useEffect(() => setLoading(true), [])
 
   const controls = useControls({
     text: { value: 'butter' },
@@ -29,7 +33,7 @@ export default function Text({ ...props }) {
     reflections: { value: 0.7, min: 0, max: 1, step: 0.1 },
     thiccness: { value: 0.3, min: -20, max: 20, step: 0.1 },
     balloonMode: { value: true },
-    balloonInflation: { value: 0.05, step: 0.01 },
+    balloonInflation: { value: 0.05, min: -1, max: 1, step: 0.01 },
     metalness: { value: 0.8, min: 0, max: 1, step: 0.05 },
     shinyness: { value: 0, min: 0, max: 1.5, step: 0.1 },
     // noiseStrength: { value: 0, min: 0, max: 1, step: 0.1 },
@@ -40,7 +44,7 @@ export default function Text({ ...props }) {
     height: controls.thiccness,
     bevelEnabled: controls.balloonMode,
     bevelSize: controls.balloonInflation,
-    bevelThickness: 0.05,
+    bevelThickness: controls.balloonInflation * 1.4,
     bevelSegments: 30,
   }
   useFrame((state, delta) => {
@@ -49,7 +53,7 @@ export default function Text({ ...props }) {
 
   return (
     <group ref={mesh} {...props}>
-      <Bloomy strength={controls.shinyness} radius={controls.shinyness} />
+      <Bloomy intensity={controls.shinyness} />
       <Center>
         <Float>
           <Text3D curveSegments={25} font={'/fonts/' + controls.font + '.json'} {...textOptions}>
