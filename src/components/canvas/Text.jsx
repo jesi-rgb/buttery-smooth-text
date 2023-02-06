@@ -1,13 +1,14 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { extend, useFrame } from '@react-three/fiber'
 import { Center, Float, Text3D } from '@react-three/drei'
 import { useControls } from 'leva'
 import { Depth, Fresnel, LayerMaterial } from 'lamina'
 import Background from './Background'
 import Bloomy from './Bloom'
-import LoadingScreen from '../dom/LoadingScreen'
+import { Glitter } from '../canvas/Layers/Glitter'
 
 export default function Text({ ...props }) {
+  extend({ Glitter })
   const mesh = useRef(null)
 
   const depth = useRef(null)
@@ -29,7 +30,7 @@ export default function Text({ ...props }) {
       value: 'abril-fatface',
     },
     textColor: { value: '#837600' },
-    roughness: { value: 0.05, min: 0.05, max: 1, step: 0.05 },
+    matte: { value: 0.05, min: 0.05, max: 1, step: 0.05 },
     reflections: { value: 0.7, min: 0, max: 1, step: 0.1 },
     thiccness: { value: 0.3, min: -20, max: 20, step: 0.1 },
     balloonMode: { value: true },
@@ -44,8 +45,8 @@ export default function Text({ ...props }) {
     height: controls.thiccness,
     bevelEnabled: controls.balloonMode,
     bevelSize: controls.balloonInflation,
-    bevelThickness: controls.balloonInflation * 1.4,
-    bevelSegments: 30,
+    bevelThickness: Math.abs(controls.balloonInflation * 1.4),
+    bevelSegments: 70,
   }
   useFrame((state, delta) => {
     depth.current.origin.set(state.mouse.y * 10, state.mouse.x * 10, 0)
@@ -58,11 +59,7 @@ export default function Text({ ...props }) {
         <Float>
           <Text3D curveSegments={25} font={'/fonts/' + controls.font + '.json'} {...textOptions}>
             {controls.text}
-            <LayerMaterial
-              color={controls.textColor}
-              lighting={'physical'}
-              roughness={controls.roughness}
-              reflectivity={1}>
+            <LayerMaterial color={controls.textColor} lighting={'physical'} roughness={controls.matte} reflectivity={1}>
               <Depth
                 ref={depth}
                 near={0.23}
@@ -73,6 +70,7 @@ export default function Text({ ...props }) {
                 colorA={'#fff'}
                 colorB={controls.textColor}
               />
+              <glitter color='red' />
               {/* <Displace mapping='local' strength={controls.noiseStrength} scale={controls.noiseScale} /> */}
               <Fresnel mode='ligthen' alpha={controls.metalness} color={controls.textColor} />
             </LayerMaterial>

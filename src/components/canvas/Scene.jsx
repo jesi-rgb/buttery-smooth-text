@@ -24,7 +24,7 @@ export default function Scene({ children, ...props }) {
           <OrbitControls makeDefault rotateSpeed={2} minPolarAngle={0} maxPolarAngle={Math.PI / 2.5} />
         </Suspense>
       </Canvas>
-      <Loader />
+      <Loader initialState={(active) => active} dataInterpolation={(p) => `Loading ${p.toFixed(2)}%`} />
     </>
   )
 }
