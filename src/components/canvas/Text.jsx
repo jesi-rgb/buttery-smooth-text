@@ -13,9 +13,6 @@ export default function Text({ ...props }) {
 
   const depth = useRef(null)
 
-  const [loading, setLoading] = useState(false)
-  useEffect(() => setLoading(true), [])
-
   const controls = useControls({
     text: { value: 'butter' },
     font: {
@@ -54,7 +51,7 @@ export default function Text({ ...props }) {
 
   return (
     <group ref={mesh} {...props}>
-      <Bloomy intensity={controls.shinyness} />
+      {/* <Bloomy intensity={controls.shinyness} /> */}
       <Center>
         <Float>
           <Text3D curveSegments={25} font={'/fonts/' + controls.font + '.json'} {...textOptions}>
@@ -70,7 +67,7 @@ export default function Text({ ...props }) {
                 colorA={'#fff'}
                 colorB={controls.textColor}
               />
-              <glitter color='red' />
+              {/* <glitter color='red' /> */}
               {/* <Displace mapping='local' strength={controls.noiseStrength} scale={controls.noiseScale} /> */}
               <Fresnel mode='ligthen' alpha={controls.metalness} color={controls.textColor} />
             </LayerMaterial>
