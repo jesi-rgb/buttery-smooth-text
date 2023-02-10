@@ -51,7 +51,7 @@ export default function Text({ ...props }) {
 
   return (
     <group ref={mesh} {...props}>
-      {/* <Bloomy intensity={controls.shinyness} /> */}
+      <Bloomy intensity={controls.shinyness} />
       <Center>
         <Float>
           <Text3D curveSegments={25} font={'/fonts/' + controls.font + '.json'} {...textOptions}>

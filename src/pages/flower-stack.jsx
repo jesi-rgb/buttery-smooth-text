@@ -15,9 +15,7 @@ import EffectStack from '@/components/dom/ui/EffectStack'
 export default function Page(props) {
   return (
     <>
-      <h1 className='mt-20 font-serif text-2xl font-bold text-center text-white lg:text-4xl'>
-        buttery smooooth text 😎
-      </h1>
+      <h1 className='mt-20 font-serif text-2xl font-bold text-center text-white lg:text-4xl'>stack example</h1>
     </>
   )
 }
