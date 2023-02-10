@@ -1,6 +1,16 @@
-import { Caustics, Effects, MeshReflectorMaterial, Plane, useTexture } from '@react-three/drei'
+import {
+  Backdrop,
+  Caustics,
+  Effects,
+  Environment,
+  MeshReflectorMaterial,
+  MeshTransmissionMaterial,
+  MeshmirrorMaterial,
+  Plane,
+  useTexture,
+} from '@react-three/drei'
 import { extend, useFrame } from '@react-three/fiber'
-import { LayerMaterial, Fresnel, Texture } from 'lamina'
+import { LayerMaterial, Fresnel, Texture, Matcap } from 'lamina'
 import { button, useControls } from 'leva'
 import { useEffect, useRef, useState } from 'react'
 import { FresnelShader } from 'three-stdlib'
@@ -9,9 +19,16 @@ import Bloomy from './Bloom'
 export default function Flower({ color = 'hotpink' }) {
   const mesh = useRef(null)
   const materialProps = useTexture({
+    // map: '/textures/terrain/aerial_rocks_02_diff_1k.jpg',
+    // displacementMap: '/textures/terrain/aerial_rocks_02_disp_1k.png',
+    // aoMap: '/textures/terrain/aerial_rocks_02_arm_1k.jpg',
+    // roughnessMap: '/textures/terrain/aerial_rocks_02_arm_1k.jpg',
+    // metalnessMap: '/textures/terrain/aerial_rocks_02_arm_1k.jpg',
     map: '/textures/metal_plate/metal_plate_diff_1k.jpg',
-    displacementMap: '/textures/metal_plate/metal_plate_disp_1k.png',
-    roughness: '/textures/metal_plate/metal_plate_rough_1k.jpg',
+    // displacementMap: '/textures/metal_plate/metal_plate_disp_1k.png',
+    aoMap: '/textures/metal_plate/metal_plate_arm_1k.jpg',
+    roughnessMap: '/textures/metal_plate/metal_plate_arm_1k.jpg',
+    metalnessMap: '/textures/metal_plate/metal_plate_arm_1k.jpg',
   })
 
   useFrame((state, delta) => {
@@ -25,12 +42,21 @@ export default function Flower({ color = 'hotpink' }) {
   let [motion, setMotion] = useState(false)
   let [texture, setTexture] = useState(false)
   let [metal, setMetal] = useState(true)
+  let [mirror, setMirror] = useState(false)
+  let [background, setBackground] = useState(
+    'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr',
+  )
 
   const controls = useControls({
+    Glass: button((get) => {
+      setMirror((mirror) => !mirror)
+      setMetal(false)
+    }),
     Metal: button((get) => {
       setMetal((metal) => !metal)
       setTexture(false)
       setShiny(false)
+      setMirror(false)
     }),
     Texture: button((get) => {
       setTexture((texture) => !texture)
@@ -44,33 +70,38 @@ export default function Flower({ color = 'hotpink' }) {
     }),
     'Base shape': button((get) => {}, { disabled: true }),
   })
+  const moreControls = useControls('Background', {
+    'Photo Studio': button((get) =>
+      setBackground('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr'),
+    ),
+    'Lake Pier': button((get) =>
+      setBackground('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/lake_pier_2k.hdr'),
+    ),
+    'Neon Studio': button((get) =>
+      setBackground('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/neon_photostudio_2k.hdr'),
+    ),
+    'Solitude Night': button((get) =>
+      setBackground('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/solitude_night_2k.hdr'),
+    ),
+  })
 
   return (
-    <group ref={mesh}>
-      {bloom && <Bloomy intensity={0.6} />}
-      <mesh rotation-y={Math.PI / 2} scale={[4, 4, 4]}>
-        <torusKnotGeometry args={[0.4, 0.05, 400, 32, 3, 7]} />
+    <>
+      <Environment ground={{ height: 10, scale: 100, radius: 70 }} files={background} blur={10} />
+      {bloom && <Bloomy intensity={0.3} />}
+      <mesh position-y={2} ref={mesh}>
+        <torusKnotGeometry args={[1.4, 0.2, 400, 32, 3, 7]} />
         {(shiny || texture) && (
           <LayerMaterial color={color}>
             {shiny && <Fresnel mode='lighten' color='yellow' alpha={1} intensity={0.9} power={3} bias={0} />}
-            {texture && <Texture {...materialProps} alpha={0.5} mode={'add'} />}
+            {texture && <Texture {...materialProps} alpha={0.7} mode='add' />}
           </LayerMaterial>
         )}
         {metal && (
-          <MeshReflectorMaterial
-            blur={[1000, 1000]}
-            resolution={64}
-            mixBlur={1}
-            mixStrength={10}
-            roughness={0}
-            depthScale={1.2}
-            minDepthThreshold={0.4}
-            maxDepthThreshold={1.4}
-            color={color}
-            metalness={1}
-          />
+          <MeshReflectorMaterial resolution={128} roughness={0.01} blur={10} mixBlur={1} color={color} metalness={1} />
         )}
+        {mirror && <MeshTransmissionMaterial thickness={10} chromaticAberration={1} />}
       </mesh>
-    </group>
+    </>
   )
 }
