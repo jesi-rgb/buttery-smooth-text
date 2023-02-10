@@ -1,15 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import { extend, useFrame } from '@react-three/fiber'
-import { Center, Float, Text3D } from '@react-three/drei'
+import { Center, Float, Text3D, useTexture, useVideoTexture } from '@react-three/drei'
 import { useControls } from 'leva'
-import { Depth, Fresnel, LayerMaterial } from 'lamina'
+import { Depth, Fresnel, LayerMaterial, Matcap, Texture } from 'lamina'
 import Background from './Background'
 import Bloomy from './Bloom'
 import { Glitter } from '../canvas/Layers/Glitter'
+import { UVMapping } from 'three'
 
 export default function Text({ ...props }) {
   extend({ Glitter })
   const mesh = useRef(null)
+
+  const materialProps = useTexture({
+    // map: '/textures/metal_plate/metal_plate_diff_1k.jpg',
+    displacementMap: '/textures/metal_plate/metal_plate_disp_1k.png',
+  })
 
   const depth = useRef(null)
 
@@ -46,7 +52,7 @@ export default function Text({ ...props }) {
     bevelSegments: 70,
   }
   useFrame((state, delta) => {
-    depth.current.origin.set(state.mouse.y * 10, state.mouse.x * 10, 0)
+    // depth.current.origin.set(state.mouse.y * 10, state.mouse.x * 10, 0)
   })
 
   return (
@@ -54,9 +60,14 @@ export default function Text({ ...props }) {
       <Bloomy intensity={controls.shinyness} />
       <Center>
         <Float>
-          <Text3D curveSegments={25} font={'/fonts/' + controls.font + '.json'} {...textOptions}>
+          <Text3D curveSegments={10} font={'/fonts/' + controls.font + '.json'} {...textOptions}>
             {controls.text}
-            <LayerMaterial color={controls.textColor} lighting={'physical'} roughness={controls.matte} reflectivity={1}>
+            <LayerMaterial
+              alpha={0.4}
+              color={controls.textColor}
+              lighting={'physical'}
+              roughness={controls.matte}
+              reflectivity={1}>
               <Depth
                 ref={depth}
                 near={0.23}
@@ -67,9 +78,9 @@ export default function Text({ ...props }) {
                 colorA={'#fff'}
                 colorB={controls.textColor}
               />
-              {/* <glitter color='red' /> */}
-              {/* <Displace mapping='local' strength={controls.noiseStrength} scale={controls.noiseScale} /> */}
               <Fresnel mode='ligthen' alpha={controls.metalness} color={controls.textColor} />
+
+              <Texture {...materialProps} alpha={1} />
             </LayerMaterial>
           </Text3D>
         </Float>

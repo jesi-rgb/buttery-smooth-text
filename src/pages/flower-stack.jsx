@@ -23,7 +23,7 @@ export default function Page(props) {
 // Canvas components go here
 // It will receive same props as the Page component (from getStaticProps, etc.)
 // Page.canvas = (props) => <Text position-y={0.5} />
-Page.canvas = (props) => <Flower color='red' />
+Page.canvas = (props) => <Flower />
 
 export async function getStaticProps() {
   return { props: { title: 'Buttery Smooth Text ' } }

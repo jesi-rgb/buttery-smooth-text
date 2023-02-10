@@ -1,6 +1,6 @@
 import { Effects } from '@react-three/drei'
 import { extend } from '@react-three/fiber'
-import { UnrealBloomPass } from 'three-stdlib'
+import { EffectComposer, UnrealBloomPass } from 'three-stdlib'
 
 extend({ UnrealBloomPass })
 export default function Bloomy({ intensity }) {
