@@ -24,26 +24,38 @@ export default function Flower({ color = 'hotpink' }) {
   let [bloom, setBloom] = useState(false)
   let [motion, setMotion] = useState(false)
   let [texture, setTexture] = useState(false)
-  let [metal, setMetal] = useState(false)
+  let [metal, setMetal] = useState(true)
 
   const controls = useControls({
-    Metal: button((get) => setMetal((metal) => !metal)),
-    Texture: button((get) => setTexture((texture) => !texture)),
+    Metal: button((get) => {
+      setMetal((metal) => !metal)
+      setTexture(false)
+      setShiny(false)
+    }),
+    Texture: button((get) => {
+      setTexture((texture) => !texture)
+      setMetal(false)
+    }),
     Bloom: button((get) => setBloom((bloom) => !bloom)),
     Motion: button((get) => setMotion((motion) => !motion)),
-    Shiny: button((get) => setShiny((shiny) => !shiny)),
+    Shiny: button((get) => {
+      setShiny((shiny) => !shiny)
+      setMetal(false)
+    }),
     'Base shape': button((get) => {}, { disabled: true }),
   })
 
   return (
     <group ref={mesh}>
-      {bloom && <Bloomy intensity={0.8} />}
+      {bloom && <Bloomy intensity={0.6} />}
       <mesh rotation-y={Math.PI / 2} scale={[4, 4, 4]}>
         <torusKnotGeometry args={[0.4, 0.05, 400, 32, 3, 7]} />
-        <LayerMaterial color={color}>
-          {shiny && <Fresnel mode='lighten' color='yellow' alpha={1} intensity={0.9} power={3} bias={0} />}
-          {texture && <Texture {...materialProps} alpha={0.3} mode={'screen'} />}
-        </LayerMaterial>
+        {(shiny || texture) && (
+          <LayerMaterial color={color}>
+            {shiny && <Fresnel mode='lighten' color='yellow' alpha={1} intensity={0.9} power={3} bias={0} />}
+            {texture && <Texture {...materialProps} alpha={0.5} mode={'add'} />}
+          </LayerMaterial>
+        )}
         {metal && (
           <MeshReflectorMaterial
             blur={[1000, 1000]}
