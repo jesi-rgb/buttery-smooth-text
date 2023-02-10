@@ -43,6 +43,7 @@ export default function Flower({ color = 'hotpink' }) {
   let [texture, setTexture] = useState(false)
   let [metal, setMetal] = useState(true)
   let [mirror, setMirror] = useState(false)
+  let [enableBg, setEnableBg] = useState(false)
   let [background, setBackground] = useState(
     'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr',
   )
@@ -61,6 +62,7 @@ export default function Flower({ color = 'hotpink' }) {
     Texture: button((get) => {
       setTexture((texture) => !texture)
       setMetal(false)
+      setMirror(false)
     }),
     Bloom: button((get) => setBloom((bloom) => !bloom)),
     Motion: button((get) => setMotion((motion) => !motion)),
@@ -71,6 +73,7 @@ export default function Flower({ color = 'hotpink' }) {
     'Base shape': button((get) => {}, { disabled: true }),
   })
   const moreControls = useControls('Background', {
+    'Enable Background': button((get) => setEnableBg((enableBg) => !enableBg)),
     'Photo Studio': button((get) =>
       setBackground('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr'),
     ),
@@ -87,7 +90,7 @@ export default function Flower({ color = 'hotpink' }) {
 
   return (
     <>
-      <Environment ground={{ height: 10, scale: 100, radius: 70 }} files={background} blur={10} />
+      <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
       {bloom && <Bloomy intensity={0.3} />}
       <mesh position-y={2} ref={mesh}>
         <torusKnotGeometry args={[1.4, 0.2, 400, 32, 3, 7]} />
