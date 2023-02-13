@@ -14,7 +14,7 @@ import { LayerMaterial, Fresnel, Texture, Matcap } from 'lamina'
 import { button, useControls } from 'leva'
 import { useEffect, useRef, useState } from 'react'
 import { FresnelShader } from 'three-stdlib'
-import Bloomy from './Bloom'
+import Bloomy from './Effects'
 
 export default function Flower({ color = 'hotpink' }) {
   const mesh = useRef(null)

@@ -1,9 +1,3 @@
-import dynamic from 'next/dynamic'
-import Instructions from '@/components/dom/Instructions'
-import Flower from '@/components/canvas/Flower'
-import Text from '@/components/canvas/Text'
-import Logo from '@/components/canvas/Logo'
-import { Text3D } from '@react-three/drei'
 import TextStackEffects from '@/components/canvas/TextStackEffects'
 
 // Dynamic import is used to prevent a payload when the website starts, that includes threejs, r3f etc..

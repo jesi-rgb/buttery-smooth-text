@@ -6,13 +6,12 @@ import {
   Text3D,
   Center,
 } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import { extend, useFrame } from '@react-three/fiber'
 import { LayerMaterial, Fresnel, Texture } from 'lamina'
 import { button, useControls } from 'leva'
 import { useRef, useState } from 'react'
-import Bloomy from './Bloom'
 
-export default function TextStackEffects({ color = 'hotpink' }) {
+export default function TextStackEffects() {
   const mesh = useRef(null)
   const materialProps = useTexture({
     map: '/textures/metal_plate/metal_plate_diff_1k.jpg',
@@ -34,13 +33,13 @@ export default function TextStackEffects({ color = 'hotpink' }) {
     'Neon Studio': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/neon_photostudio_2k.hdr',
     'Solitude Night': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/solitude_night_2k.hdr',
   }
+
   let [shiny, setShiny] = useState(false)
-  let [bloom, setBloom] = useState(false)
   let [motion, setMotion] = useState(false)
   let [texture, setTexture] = useState(false)
   let [metal, setMetal] = useState(true)
   let [mirror, setMirror] = useState(false)
-  let [enableBg, setEnableBg] = useState(false)
+  let [enableBg, setEnableBg] = useState(true)
   let [background, setBackground] = useState(backgrounds['Photo Studio'])
 
   let textOptions = {
@@ -82,7 +81,6 @@ export default function TextStackEffects({ color = 'hotpink' }) {
       setMetal(false)
       setMirror(false)
     }),
-    Bloom: button((get) => setBloom((bloom) => !bloom)),
     Motion: button((get) => setMotion((motion) => !motion)),
     Shiny: button((get) => {
       setShiny((shiny) => !shiny)
@@ -102,17 +100,25 @@ export default function TextStackEffects({ color = 'hotpink' }) {
   return (
     <>
       <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
-      {bloom && <Bloomy intensity={0.7} />}
       <mesh position-y={2} ref={mesh}>
         <Center>
           <Text3D curveSegments={10} font={'/fonts/' + textControls.font + '.json'} {...textOptions}>
             {textControls.text}
-            {(shiny || texture) && (
+            {shiny && (
               <LayerMaterial color={textControls.color}>
                 {shiny && <Fresnel mode='lighten' color='white' alpha={0.6} intensity={0.9} power={3} bias={0} />}
-                {texture && <Texture {...materialProps} alpha={0.8} mode='add' />}
+                {/* {texture && <Texture {...materialProps} alpha={0.8} mode='add' />} */}
               </LayerMaterial>
             )}
+            {texture && (
+              <meshStandardMaterial
+                envMapIntensity={1}
+                aoMapIntensity={2}
+                displacementScale={0.01}
+                {...materialProps}
+              />
+            )}
+
             {metal && (
               <MeshReflectorMaterial
                 resolution={8}
@@ -124,7 +130,7 @@ export default function TextStackEffects({ color = 'hotpink' }) {
                 distortion={1}
               />
             )}
-            {mirror && <MeshTransmissionMaterial thickness={10} chromaticAberration={1} />}
+            {mirror && <MeshTransmissionMaterial samples={2} thickness={5} chromaticAberration={0.5} />}
           </Text3D>
         </Center>
       </mesh>

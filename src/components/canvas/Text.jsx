@@ -4,7 +4,7 @@ import { Center, Float, Text3D, useTexture, useVideoTexture } from '@react-three
 import { useControls } from 'leva'
 import { Depth, Fresnel, LayerMaterial, Matcap, Texture } from 'lamina'
 import Background from './Background'
-import Bloomy from './Bloom'
+import Bloomy from './Effects'
 import { Glitter } from '../canvas/Layers/Glitter'
 import { UVMapping } from 'three'
 
