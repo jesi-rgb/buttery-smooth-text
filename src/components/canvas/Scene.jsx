@@ -16,7 +16,7 @@ export default function Scene({ children, ...props }) {
           <ambientLight intensity={2.75} />
           {children}
           <Preload all />
-          <OrbitControls makeDefault rotateSpeed={2} minPolarAngle={0} maxPolarAngle={Math.PI / 2.5} />
+          <OrbitControls makeDefault rotateSpeed={2} />
         </Suspense>
       </Canvas>
       <Loader initialState={(active) => active} dataInterpolation={(p) => `Loading ${p.toFixed(2)}%`} />

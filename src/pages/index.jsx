@@ -3,6 +3,8 @@ import Instructions from '@/components/dom/Instructions'
 import Flower from '@/components/canvas/Flower'
 import Text from '@/components/canvas/Text'
 import Logo from '@/components/canvas/Logo'
+import { Text3D } from '@react-three/drei'
+import TextStackEffects from '@/components/canvas/TextStackEffects'
 
 // Dynamic import is used to prevent a payload when the website starts, that includes threejs, r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
@@ -20,7 +22,7 @@ export default function Page(props) {
 // Canvas components go here
 // It will receive same props as the Page component (from getStaticProps, etc.)
 // Page.canvas = (props) => <Text position-y={0.5} />
-Page.canvas = (props) => <Text />
+Page.canvas = (props) => <TextStackEffects color='hotpink' />
 
 export async function getStaticProps() {
   return { props: { title: 'Buttery Smooth Text ' } }
