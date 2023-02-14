@@ -5,6 +5,7 @@ import {
   useTexture,
   Text3D,
   Center,
+  Float,
 } from '@react-three/drei'
 import { extend, useFrame } from '@react-three/fiber'
 import { LayerMaterial, Fresnel, Texture } from 'lamina'
@@ -21,15 +22,16 @@ export default function TextStackEffects() {
     metalnessMap: '/textures/metal_plate/metal_plate_arm_1k.jpg',
   })
 
-  useFrame((state, delta) => {
-    mesh.current.rotation.z += motion ? delta / 2 : 0
-    mesh.current.rotation.x += motion ? delta * 1.2 : 0
-    mesh.current.rotation.y += motion ? delta * 1.4 : 0
-  })
+  //   useFrame((state, delta) => {
+  //     mesh.current.rotation.z += motion ? delta / 2 : 0
+  //     mesh.current.rotation.x += motion ? delta * 1.2 : 0
+  //     mesh.current.rotation.y += motion ? delta * 1.4 : 0
+  //     mesh.current.position.x += motion ? Math.sin(delta * 100) / 10 : 0
+  //   })
 
   const backgrounds = {
     'Photo Studio': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr',
-    'Lake Pier': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr',
+    'Lake Pier': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/lake_pier_1k.hdr',
     'Neon Studio': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/neon_photostudio_2k.hdr',
     'Solitude Night': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/solitude_night_2k.hdr',
   }
@@ -101,38 +103,40 @@ export default function TextStackEffects() {
     <>
       <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
       <mesh position-y={2} ref={mesh}>
-        <Center>
-          <Text3D curveSegments={10} font={'/fonts/' + textControls.font + '.json'} {...textOptions}>
-            {textControls.text}
-            {shiny && (
-              <LayerMaterial color={textControls.color}>
-                {shiny && <Fresnel mode='lighten' color='white' alpha={0.6} intensity={0.9} power={3} bias={0} />}
-                {/* {texture && <Texture {...materialProps} alpha={0.8} mode='add' />} */}
-              </LayerMaterial>
-            )}
-            {texture && (
-              <meshStandardMaterial
-                envMapIntensity={1}
-                aoMapIntensity={2}
-                displacementScale={0.01}
-                {...materialProps}
-              />
-            )}
+        <Float speed={motion ? 3 : 0} rotationIntensity={3}>
+          <Center>
+            <Text3D curveSegments={10} font={'/fonts/' + textControls.font + '.json'} {...textOptions}>
+              {textControls.text}
+              {shiny && (
+                <LayerMaterial color={textControls.color}>
+                  {shiny && <Fresnel mode='lighten' color='white' alpha={0.6} intensity={0.9} power={3} bias={0} />}
+                  {/* {texture && <Texture {...materialProps} alpha={0.8} mode='add' />} */}
+                </LayerMaterial>
+              )}
+              {texture && (
+                <meshStandardMaterial
+                  envMapIntensity={1}
+                  aoMapIntensity={2}
+                  displacementScale={0.01}
+                  {...materialProps}
+                />
+              )}
 
-            {metal && (
-              <MeshReflectorMaterial
-                resolution={8}
-                roughness={0.01}
-                blur={[30, 30]}
-                mixBlur={0.3}
-                color={textControls.color}
-                metalness={1}
-                distortion={1}
-              />
-            )}
-            {mirror && <MeshTransmissionMaterial samples={2} thickness={5} chromaticAberration={0.5} />}
-          </Text3D>
-        </Center>
+              {metal && (
+                <MeshReflectorMaterial
+                  resolution={8}
+                  roughness={0.01}
+                  blur={[30, 30]}
+                  mixBlur={0.3}
+                  color={textControls.color}
+                  metalness={1}
+                  distortion={1}
+                />
+              )}
+              {mirror && <MeshTransmissionMaterial samples={2} thickness={5} chromaticAberration={0.5} />}
+            </Text3D>
+          </Center>
+        </Float>
       </mesh>
     </>
   )
