@@ -22,7 +22,6 @@ ShaderImpl.key = THREE.MathUtils.generateUUID()
 
 extend({ ShaderImpl })
 
-// eslint-disable-next-line react/display-name
 const Shader = forwardRef(({ children, ...props }, ref) => {
   const localRef = useRef()
 
