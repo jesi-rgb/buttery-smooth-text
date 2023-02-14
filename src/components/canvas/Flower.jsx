@@ -14,7 +14,6 @@ import { LayerMaterial, Fresnel, Texture, Matcap } from 'lamina'
 import { button, useControls } from 'leva'
 import { useEffect, useRef, useState } from 'react'
 import { FresnelShader } from 'three-stdlib'
-import Bloomy from './Effects'
 
 export default function Flower({ color = 'hotpink' }) {
   const mesh = useRef(null)
@@ -91,7 +90,6 @@ export default function Flower({ color = 'hotpink' }) {
   return (
     <>
       <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
-      {bloom && <Bloomy intensity={0.3} />}
       <mesh position-y={2} ref={mesh}>
         <torusKnotGeometry args={[1.4, 0.2, 400, 32, 3, 7]} />
         {(shiny || texture) && (

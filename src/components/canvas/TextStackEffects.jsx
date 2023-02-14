@@ -6,6 +6,7 @@ import {
   Text3D,
   Center,
   Float,
+  useVideoTexture,
 } from '@react-three/drei'
 import { extend, useFrame } from '@react-three/fiber'
 import { LayerMaterial, Fresnel, Texture } from 'lamina'
@@ -22,12 +23,7 @@ export default function TextStackEffects() {
     metalnessMap: '/textures/metal_plate/metal_plate_arm_1k.jpg',
   })
 
-  //   useFrame((state, delta) => {
-  //     mesh.current.rotation.z += motion ? delta / 2 : 0
-  //     mesh.current.rotation.x += motion ? delta * 1.2 : 0
-  //     mesh.current.rotation.y += motion ? delta * 1.4 : 0
-  //     mesh.current.position.x += motion ? Math.sin(delta * 100) / 10 : 0
-  //   })
+  const videoTexture = useVideoTexture('/textures/video/10.mp4')
 
   const backgrounds = {
     'Photo Studio': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr',
@@ -36,9 +32,9 @@ export default function TextStackEffects() {
     'Solitude Night': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/solitude_night_2k.hdr',
   }
 
-  let [shiny, setShiny] = useState(false)
   let [motion, setMotion] = useState(false)
   let [texture, setTexture] = useState(false)
+  let [video, setVideoTexture] = useState(false)
   let [metal, setMetal] = useState(true)
   let [mirror, setMirror] = useState(false)
   let [enableBg, setEnableBg] = useState(true)
@@ -75,7 +71,11 @@ export default function TextStackEffects() {
     Metal: button((get) => {
       setMetal((metal) => !metal)
       setTexture(false)
-      setShiny(false)
+      setMirror(false)
+    }),
+    Video: button((get) => {
+      setVideoTexture((video) => !video)
+      setMetal(false)
       setMirror(false)
     }),
     Texture: button((get) => {
@@ -84,10 +84,7 @@ export default function TextStackEffects() {
       setMirror(false)
     }),
     Motion: button((get) => setMotion((motion) => !motion)),
-    Shiny: button((get) => {
-      setShiny((shiny) => !shiny)
-      setMetal(false)
-    }),
+
     'Base shape': button((get) => {}, { disabled: true }),
   })
 
@@ -107,12 +104,7 @@ export default function TextStackEffects() {
           <Center>
             <Text3D curveSegments={10} font={'/fonts/' + textControls.font + '.json'} {...textOptions}>
               {textControls.text}
-              {shiny && (
-                <LayerMaterial color={textControls.color}>
-                  {shiny && <Fresnel mode='lighten' color='white' alpha={0.6} intensity={0.9} power={3} bias={0} />}
-                  {/* {texture && <Texture {...materialProps} alpha={0.8} mode='add' />} */}
-                </LayerMaterial>
-              )}
+
               {texture && (
                 <meshStandardMaterial
                   envMapIntensity={1}
@@ -123,6 +115,7 @@ export default function TextStackEffects() {
                   roughness={0.3}
                 />
               )}
+              {video && <meshBasicMaterial map={videoTexture} toneMapped={false} />}
 
               {metal && (
                 <MeshReflectorMaterial
