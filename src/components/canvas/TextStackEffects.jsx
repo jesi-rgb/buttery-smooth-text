@@ -8,8 +8,6 @@ import {
   Float,
   useVideoTexture,
 } from '@react-three/drei'
-import { extend, useFrame } from '@react-three/fiber'
-import { LayerMaterial, Fresnel, Texture } from 'lamina'
 import { button, useControls } from 'leva'
 import { useRef, useState } from 'react'
 
