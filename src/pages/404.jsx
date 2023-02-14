@@ -1,7 +1,6 @@
 import Flower from '@/components/canvas/Flower'
 import dynamic from 'next/dynamic'
 
-const Logo = dynamic(() => import('@/components/canvas/Logo'), { ssr: false })
 export default function Error() {
   return (
     <div className='mt-20 font-serif text-center text-red-200'>

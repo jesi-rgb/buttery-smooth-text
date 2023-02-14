@@ -4,7 +4,6 @@ import { Center, Float, Text3D, useTexture, useVideoTexture } from '@react-three
 import { useControls } from 'leva'
 import { Depth, Fresnel, LayerMaterial, Matcap, Texture } from 'lamina'
 import Background from './Background'
-import Bloomy from './Effects'
 import { Glitter } from '../canvas/Layers/Glitter'
 import { UVMapping } from 'three'
 
@@ -57,7 +56,6 @@ export default function Text({ ...props }) {
 
   return (
     <group ref={mesh} {...props}>
-      <Bloomy intensity={controls.shinyness} />
       <Center>
         <Float>
           <Text3D curveSegments={10} font={'/fonts/' + controls.font + '.json'} {...textOptions}>
