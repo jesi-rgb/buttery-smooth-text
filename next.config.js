@@ -2,11 +2,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
-const withPWA = require('next-pwa')({
-  dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
-})
-
 const nextConfig = {
   // uncomment the following snippet if using styled components
   // compiler: {
@@ -57,7 +52,7 @@ if (process.env.EXPORT !== 'true') {
 const KEYS_TO_OMIT = ['webpackDevMiddleware', 'configOrigin', 'target', 'analyticsId', 'webpack5', 'amp', 'assetPrefix']
 
 module.exports = (_phase, { defaultConfig }) => {
-  const plugins = [[withPWA], [withBundleAnalyzer, {}]]
+  const plugins = [[withBundleAnalyzer, {}]]
 
   const wConfig = plugins.reduce((acc, [plugin, config]) => plugin({ ...acc, ...config }), {
     ...defaultConfig,
