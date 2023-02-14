@@ -103,7 +103,7 @@ export default function TextStackEffects() {
     <>
       <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
       <mesh position-y={2} ref={mesh}>
-        <Float speed={motion ? 3 : 0} rotationIntensity={3}>
+        <Float speed={motion ? 3 : 0} rotationIntensity={motion ? 2 : 0}>
           <Center>
             <Text3D curveSegments={10} font={'/fonts/' + textControls.font + '.json'} {...textOptions}>
               {textControls.text}
@@ -117,8 +117,10 @@ export default function TextStackEffects() {
                 <meshStandardMaterial
                   envMapIntensity={1}
                   aoMapIntensity={2}
-                  displacementScale={0.01}
+                  displacementScale={0.03}
                   {...materialProps}
+                  metalness={1}
+                  roughness={0.3}
                 />
               )}
 
