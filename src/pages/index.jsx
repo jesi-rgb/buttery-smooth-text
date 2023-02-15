@@ -1,4 +1,8 @@
 import TextStackEffects from '@/components/canvas/TextStackEffects'
+import EffectContainer from '@/components/dom/ui/EffectContainer'
+import { effectList } from '@/components/dom/ui/effects'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { resetServerContext } from 'react-beautiful-dnd'
 
 // Dynamic import is used to prevent a payload when the website starts, that includes threejs, r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
@@ -8,8 +12,23 @@ import TextStackEffects from '@/components/canvas/TextStackEffects'
 
 // Dom components go here
 export default function Page(props) {
+  const onDragEnd = (result) => {
+    // TODO: reorder our column
+  }
+  resetServerContext()
   return (
-    <h1 className='mt-20 font-serif text-2xl font-bold text-center text-white lg:text-4xl'>buttery smooooth text 😎</h1>
+    <>
+      <div>
+        <DragDropContext onDragEnd={onDragEnd}>
+          {effectList.columnOrder.map((columnId) => {
+            const column = effectList.columns[columnId]
+            const effects = column.effectIds.map((effectId) => effectList.effects[effectId])
+
+            return <EffectContainer key={column.id} column={column} effects={effects} />
+          })}
+        </DragDropContext>
+      </div>
+    </>
   )
 }
 

@@ -1,3 +1,4 @@
+import usePostProcess from '@/templates/hooks/usePostprocess'
 import {
   Environment,
   MeshReflectorMaterial,
@@ -22,6 +23,7 @@ export default function TextStackEffects() {
   })
 
   const videoTexture = useVideoTexture('/textures/video/10.mp4')
+  //   usePostProcess()
 
   const backgrounds = {
     'Photo Studio': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr',
