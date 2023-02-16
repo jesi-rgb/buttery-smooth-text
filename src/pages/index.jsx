@@ -14,6 +14,7 @@ const EffectContainer = dynamic(() => import('@/components/dom/ui/EffectContaine
 // Dom components go here
 export default function Page(props) {
   let [state, setState] = useState(effectList)
+  let [effect, setEffect] = useState('Metal')
 
   const onDragEnd = (result) => {
     // TODO: reorder our column
@@ -61,9 +62,8 @@ export default function Page(props) {
 
 // Canvas components go here
 // It will receive same props as the Page component (from getStaticProps, etc.)
-// Page.canvas = (props) => <Text position-y={0.5} />
 Page.canvas = (props) => <TextStackEffects color='hotpink' />
 
 export async function getStaticProps() {
-  return { props: { title: 'Buttery Smooth Text ' } }
+  return { props: { title: 'Buttery Smooth Text' } }
 }

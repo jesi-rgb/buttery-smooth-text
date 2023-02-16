@@ -10,6 +10,7 @@ import {
   useVideoTexture,
   useCursor,
 } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import { button, useControls } from 'leva'
 import { useRef, useState } from 'react'
 
@@ -24,10 +25,8 @@ export default function TextStackEffects() {
   })
 
   const [hovered, setHover] = useState(false)
-  useCursor(hovered)
 
   const videoTexture = useVideoTexture('/textures/video/10.mp4')
-  //   usePostProcess()
 
   const backgrounds = {
     'Photo Studio': 'https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/2k/christmas_photo_studio_07_2k.hdr',
@@ -100,49 +99,50 @@ export default function TextStackEffects() {
     'Solitude Night': button((get) => setBackground(backgrounds['Solitude Night'])),
   })
 
+  useCursor(hovered, 'pointer')
+
   return (
     <>
       <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
-      <mesh
-        position-y={2}
-        ref={mesh}
-        onPointerOut={(e) => setHover(false)}
-        onPointerOver={(e) => {
-          e.stopPropagation()
-          setHover(true)
-        }}>
-        <Float speed={motion ? 3 : 0} rotationIntensity={motion ? 2 : 0}>
-          <Center>
-            <Text3D curveSegments={10} font={'/fonts/' + textControls.font + '.json'} {...textOptions}>
-              {textControls.text}
+      <mesh position-y={2}>
+        <Center>
+          <Text3D
+            ref={mesh}
+            onPointerOut={(e) => setHover(false)}
+            onPointerOver={(e) => {
+              setHover(true)
+            }}
+            curveSegments={10}
+            font={'/fonts/' + textControls.font + '.json'}
+            {...textOptions}>
+            {textControls.text}
 
-              {texture && (
-                <meshStandardMaterial
-                  envMapIntensity={1}
-                  aoMapIntensity={2}
-                  displacementScale={0.03}
-                  {...materialProps}
-                  metalness={1}
-                  roughness={0.3}
-                />
-              )}
-              {video && <meshBasicMaterial map={videoTexture} toneMapped={false} />}
+            {texture && (
+              <meshStandardMaterial
+                envMapIntensity={1}
+                aoMapIntensity={2}
+                displacementScale={0.03}
+                {...materialProps}
+                metalness={1}
+                roughness={0.3}
+              />
+            )}
+            {video && <meshBasicMaterial map={videoTexture} toneMapped={false} />}
 
-              {metal && (
-                <MeshReflectorMaterial
-                  resolution={8}
-                  roughness={0.01}
-                  blur={[30, 30]}
-                  mixBlur={0.3}
-                  color={textControls.color}
-                  metalness={1}
-                  distortion={1}
-                />
-              )}
-              {mirror && <MeshTransmissionMaterial samples={2} thickness={5} chromaticAberration={0.5} />}
-            </Text3D>
-          </Center>
-        </Float>
+            {metal && (
+              <MeshReflectorMaterial
+                resolution={8}
+                roughness={0.01}
+                blur={[30, 30]}
+                mixBlur={0.3}
+                color={textControls.color}
+                metalness={1}
+                distortion={1}
+              />
+            )}
+            {mirror && <MeshTransmissionMaterial samples={2} thickness={5} chromaticAberration={0.5} />}
+          </Text3D>
+        </Center>
       </mesh>
     </>
   )
