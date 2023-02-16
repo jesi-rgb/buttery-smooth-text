@@ -8,6 +8,7 @@ import {
   Center,
   Float,
   useVideoTexture,
+  useCursor,
 } from '@react-three/drei'
 import { button, useControls } from 'leva'
 import { useRef, useState } from 'react'
@@ -21,6 +22,9 @@ export default function TextStackEffects() {
     roughnessMap: '/textures/metal_plate/metal_plate_arm_1k.jpg',
     metalnessMap: '/textures/metal_plate/metal_plate_arm_1k.jpg',
   })
+
+  const [hovered, setHover] = useState(false)
+  useCursor(hovered)
 
   const videoTexture = useVideoTexture('/textures/video/10.mp4')
   //   usePostProcess()
@@ -99,7 +103,14 @@ export default function TextStackEffects() {
   return (
     <>
       <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
-      <mesh position-y={2} ref={mesh}>
+      <mesh
+        position-y={2}
+        ref={mesh}
+        onPointerOut={(e) => setHover(false)}
+        onPointerOver={(e) => {
+          e.stopPropagation()
+          setHover(true)
+        }}>
         <Float speed={motion ? 3 : 0} rotationIntensity={motion ? 2 : 0}>
           <Center>
             <Text3D curveSegments={10} font={'/fonts/' + textControls.font + '.json'} {...textOptions}>
