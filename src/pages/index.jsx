@@ -1,8 +1,9 @@
+import Scene from '@/components/canvas/Scene'
 import TextStackEffects from '@/components/canvas/TextStackEffects'
 import { effectList } from '@/components/dom/ui/effects'
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 // Dynamic import is used to prevent a payload when the website starts, that includes threejs, r3f etc..
 // WARNING ! errors might get obfuscated by using dynamic import.
@@ -54,6 +55,18 @@ export default function Page(props) {
 
             return <EffectContainer key={column.id} column={column} effects={effects} />
           })}
+
+          <Droppable droppableId={'canvas'}>
+            {(provided) => {
+              return (
+                <div ref={provided.innerRef}>
+                  <Scene>
+                    <TextStackEffects color='hotpink' />
+                  </Scene>
+                </div>
+              )
+            }}
+          </Droppable>
         </DragDropContext>
       </div>
     </>
@@ -62,7 +75,9 @@ export default function Page(props) {
 
 // Canvas components go here
 // It will receive same props as the Page component (from getStaticProps, etc.)
-Page.canvas = (props) => <TextStackEffects color='hotpink' />
+// Page.canvas = (props) => (
+
+// )
 
 export async function getStaticProps() {
   return { props: { title: 'Buttery Smooth Text' } }
