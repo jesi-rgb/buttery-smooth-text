@@ -12,9 +12,9 @@ import {
 } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { button, useControls } from 'leva'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-export default function TextStackEffects() {
+export default function TextStackEffects({ effect }) {
   const mesh = useRef(null)
   const materialProps = useTexture({
     map: '/textures/metal_plate/metal_plate_diff_1k.jpg',
@@ -42,6 +42,26 @@ export default function TextStackEffects() {
   let [mirror, setMirror] = useState(false)
   let [enableBg, setEnableBg] = useState(true)
   let [background, setBackground] = useState(backgrounds['Photo Studio'])
+
+  const draggableEffects = {
+    Texture: () => {
+      setTexture(true)
+      setMetal(false)
+      setMirror(false)
+    },
+    Motion: () => {
+      setMotion(true)
+    },
+    Glass: () => {
+      setMirror(true)
+      setMetal(false)
+    },
+    Metal: () => {
+      setMetal(true)
+      setTexture(false)
+      setMirror(false)
+    },
+  }
 
   let textOptions = {
     height: 0.3,
@@ -101,48 +121,54 @@ export default function TextStackEffects() {
 
   useCursor(hovered, 'pointer')
 
+  useEffect(() => {
+    draggableEffects[effect]()
+  })
+
   return (
     <>
       <Environment ground={enableBg ? { height: 10, scale: 100, radius: 70 } : null} files={background} blur={10} />
       <mesh position-y={2}>
-        <Center>
-          <Text3D
-            ref={mesh}
-            onPointerOut={(e) => setHover(false)}
-            onPointerOver={(e) => {
-              setHover(true)
-            }}
-            curveSegments={10}
-            font={'/fonts/' + textControls.font + '.json'}
-            {...textOptions}>
-            {textControls.text}
+        <Float speed={motion ? 3 : 0}>
+          <Center>
+            <Text3D
+              ref={mesh}
+              onPointerOut={(e) => setHover(false)}
+              onPointerOver={(e) => {
+                setHover(true)
+              }}
+              curveSegments={10}
+              font={'/fonts/' + textControls.font + '.json'}
+              {...textOptions}>
+              {textControls.text}
 
-            {texture && (
-              <meshStandardMaterial
-                envMapIntensity={1}
-                aoMapIntensity={2}
-                displacementScale={0.03}
-                {...materialProps}
-                metalness={1}
-                roughness={0.3}
-              />
-            )}
-            {video && <meshBasicMaterial map={videoTexture} toneMapped={false} />}
+              {texture && (
+                <meshStandardMaterial
+                  envMapIntensity={1}
+                  aoMapIntensity={2}
+                  displacementScale={0.03}
+                  {...materialProps}
+                  metalness={1}
+                  roughness={0.3}
+                />
+              )}
+              {video && <meshBasicMaterial map={videoTexture} toneMapped={false} />}
 
-            {metal && (
-              <MeshReflectorMaterial
-                resolution={8}
-                roughness={0.01}
-                blur={[30, 30]}
-                mixBlur={0.3}
-                color={textControls.color}
-                metalness={1}
-                distortion={1}
-              />
-            )}
-            {mirror && <MeshTransmissionMaterial samples={2} thickness={5} chromaticAberration={0.5} />}
-          </Text3D>
-        </Center>
+              {metal && (
+                <MeshReflectorMaterial
+                  resolution={8}
+                  roughness={0.01}
+                  blur={[30, 30]}
+                  mixBlur={0.3}
+                  color={textControls.color}
+                  metalness={1}
+                  distortion={1}
+                />
+              )}
+              {mirror && <MeshTransmissionMaterial samples={2} thickness={5} chromaticAberration={0.5} />}
+            </Text3D>
+          </Center>
+        </Float>
       </mesh>
     </>
   )

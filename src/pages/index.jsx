@@ -21,7 +21,13 @@ export default function Page(props) {
     // TODO: reorder our column
     const { destination, source, draggableId } = result
 
-    if (!destination) return
+    if (!destination) {
+      // we threw the effect into the canvas, which is not registered. change effect!
+
+      //   console.log(state.effects[draggableId].name)
+      setEffect(state.effects[draggableId].name)
+      return
+    }
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
@@ -59,9 +65,9 @@ export default function Page(props) {
           <Droppable droppableId={'canvas'}>
             {(provided) => {
               return (
-                <div ref={provided.innerRef}>
+                <div ref={provided.innerRef} className='h-screen'>
                   <Scene>
-                    <TextStackEffects color='hotpink' />
+                    <TextStackEffects effect={effect} color='hotpink' />
                   </Scene>
                 </div>
               )
